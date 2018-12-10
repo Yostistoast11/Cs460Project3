@@ -157,7 +157,7 @@ token_type LexicalAnalyzer::GetToken ()
 	error_type = 1;
 	lexeme = "";
 	int state = 1;
-	token_type token = NONE;
+	token_type token = NONI;
 	map <string, token_type>::iterator itr;
 	if (input.fail())
 	{
@@ -182,7 +182,7 @@ token_type LexicalAnalyzer::GetToken ()
 			line += ' ';
 			pos = 0;
 		}
-	while (token == NONE)
+	while (token == NONI)
 	{
 		char c = line[pos++];
 		lexeme += c;
