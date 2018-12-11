@@ -32,6 +32,7 @@ class SyntacticalAnalyzer
     private:
 	int errors;
 	LexicalAnalyzer * lex;
+	CodeGen * gen;
 	token_type token;
 	ifstream input;
 	ofstream listingFile;

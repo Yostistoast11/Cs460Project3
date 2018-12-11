@@ -16,22 +16,21 @@ using namespace std;
 
 SyntacticalAnalyzer::SyntacticalAnalyzer (char * filename)
 {
-	lex = new LexicalAnalyzer (filename);
-	string filename2 = "Test.cpp";
-	gen = new CodeGen (filename);
-	token_type t;
-	
-	int i =0;
-	string file = "";
-	while( filename[i] != '.'){
-		file += filename[i];
-		i++;
-	}
-	token = lex -> GetToken();
-	
-	ruleFile.open(file + ".p2");
-
-	errors = program();
+  
+  lex = new LexicalAnalyzer (filename);
+  token_type t;
+  
+  int i =0;
+  string file = "";
+  while( filename[i] != '.'){
+    file += filename[i];
+    i++;
+  }
+  token = lex -> GetToken();
+  
+  ruleFile.open(file + ".p2");
+  
+  errors = program();
 }
 
 SyntacticalAnalyzer::~SyntacticalAnalyzer ()
@@ -41,7 +40,6 @@ SyntacticalAnalyzer::~SyntacticalAnalyzer ()
   lex->debug << errors << " Syntactical errors found in input file\n";
   ruleFile.close();
   delete lex;
-  delete gen;
 }
 
 int SyntacticalAnalyzer::program(){
@@ -144,8 +142,8 @@ int SyntacticalAnalyzer::define(){
 	}
 
 	//Caveman's first attempt at coding project3 
-	//	gen->WriteCode (0, ("object" + lex->GetLexeme() + "(")); 
-	gen->WriteCode(0, lex->GetLexeme());	  
+	//	WriteCode (0, ("object" + lex->GetLexeme() + "(")); 
+	WriteCode(0, lex->GetLexeme());	  
 	token = lex->GetToken();
 	errors += param_list();
 
@@ -166,7 +164,7 @@ int SyntacticalAnalyzer::define(){
 	}
 
 	//Caveman's second attempt
-	gen->WriteCode(0, ")\n{\n"); 
+	WriteCode(0, ")\n{\n"); 
 	token = lex->GetToken();
 	ruleFile << "Exiting Define function; current token is: " << lex ->GetTokenName (token) << endl;
 
@@ -175,7 +173,7 @@ int SyntacticalAnalyzer::define(){
 
 }
 
-int SyntacticalAnalyzer::stmt_list(string operator){
+int SyntacticalAnalyzer::stmt_list(){
   //This function deals with the stmt_list rules(5-6) and will check for syntactical correctness,
   //this function will then, depending on the token seen, send the program to stmt and stmt list
   // or will return after seeing nothing in the file.
@@ -281,7 +279,7 @@ int SyntacticalAnalyzer::literal(){
   
   if (token == NUMLIT_T)
     { 
-     gen->WriteCode(0, lex->GetLexeme());
+     WriteCode(0, lex->GetLexeme());
       ruleFile << "Using Rule 10" << endl;
       token = lex->GetToken();
       ruleFile << "Exiting Literal function; current token is: " << lex ->GetTokenName (token) << endl;
@@ -291,7 +289,7 @@ int SyntacticalAnalyzer::literal(){
   
   if (token == STRLIT_T)
     {
-     gen->WriteCode(0, lex->GetLexeme());
+     WriteCode(0, lex->GetLexeme());
       ruleFile << "Using Rule 11" << endl;
       token = lex->GetToken();
       ruleFile << "Exiting Literal function; current token is: " << lex ->GetTokenName (token) << endl;
@@ -302,12 +300,12 @@ int SyntacticalAnalyzer::literal(){
   if ( token == SQUOTE_T )
     {
       //should we have (" \" ") instead of getlexeme(), because the lexeme should be a ' 
-     gen->WriteCode(0, lex->GetLexeme());
+     WriteCode(0, lex->GetLexeme());
       ruleFile << "Using Rule 12" << endl;
       //ruleFile << "Literal Function complete. Current token is: " << lex->GetTokenName(token) << endl;
       token = lex->GetToken();
       errors += quoted_lit();
-     gen->WriteCode(0, " \" ");
+     WriteCode(0, " \" ");
     }
   else{
     if ( token != RPAREN_T){
@@ -737,160 +735,160 @@ int SyntacticalAnalyzer::any_other_token(){
     break;
   case IDENT_T:
     ruleFile << "Using Rule 51\n";
-   gen->WriteCode(0, lex->GetLexeme());
+   WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case NUMLIT_T:
     ruleFile << "Using Rule 52\n";
-   gen->WriteCode(0, lex->GetLexeme());
+   WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case STRLIT_T:
     ruleFile << "Using Rule 53\n";
-   gen->WriteCode(0, lex->GetLexeme());
+   WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case CONS_T:
     ruleFile << "Using Rule 54\n";
-   gen->WriteCode(0, lex->GetLexeme());
+   WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case IF_T:
     ruleFile << "Using Rule 55\n";
-   gen->WriteCode(0, lex->GetLexeme());
+   WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case DISPLAY_T:
     ruleFile << "Using Rule 56\n";
-   gen->WriteCode(0, lex->GetLexeme());
+   WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case NEWLINE_T:
     ruleFile << "Using Rule 57\n";
-   gen->WriteCode(0, lex->GetLexeme());
+   WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case LISTOP_T:
     ruleFile << "Using Rule 58\n";
-   gen->WriteCode(0, lex->GetLexeme());
+   WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case AND_T:
     ruleFile << "Using Rule 59\n";
-   gen->WriteCode(0, lex->GetLexeme());
+   WriteCode(0, lex-GetLexeme());
     token = lex->GetToken();
     break;
   case OR_T:
     ruleFile << "Using Rule 60\n";
-   gen->WriteCode(0, lex->GetLexeme());
+   WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case NOT_T:
     ruleFile << "Using Rule 61\n";
-   gen->WriteCode(0, lex->GetLexeme());
+   WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case DEFINE_T:
     ruleFile << "Using Rule 62\n";
-   gen->WriteCode(0, lex->GetLexeme());
+   WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case NUMBERP_T:
     ruleFile << "Using Rule 63\n";
-   gen->WriteCode(0, lex->GetLexeme());
+   WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case LISTP_T:
     ruleFile << "Using Rule 64\n";
-   gen->WriteCode(0, lex->GetLexeme());
+   WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case ZEROP_T:
     ruleFile << "Using Rule 65\n";
-   gen->WriteCode(0, lex->GetLexeme());
+   WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case NULLP_T:
     ruleFile << "Using Rule 66\n";
-    gen->WriteCode(0, lex->GetLexeme());
+    WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case STRINGP_T:
     ruleFile << "Using Rule 67\n";
-    gen->WriteCode(0, lex->GetLexeme());
+    WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case PLUS_T:
     ruleFile << "Using Rule 68\n";
-    gen->WriteCode(0, lex->GetLexeme());
+    WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case MINUS_T:
     ruleFile << "Using Rule 69\n";
-    gen->WriteCode(0, lex->GetLexeme());
+    WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case DIV_T:
     ruleFile << "Using Rule 70\n";
-    gen->WriteCode(0, lex->GetLexeme());
+    WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case MULT_T:
     ruleFile << "Using Rule 71\n";
-    gen->WriteCode(0, lex->GetLexeme());
+    WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case MODULO_T:
     ruleFile << "Using Rule 72\n";
-    gen->WriteCode(0, lex->GetLexeme());
+    WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case ROUND_T:
     ruleFile << "Using Rule 73\n";
-    gen->WriteCode(0, lex->GetLexeme());
+    WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case EQUALTO_T:
     ruleFile << "Using Rule 74\n";
-    gen->WriteCode(0, lex->GetLexeme());
+    WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case GT_T:
     ruleFile << "Using Rule 75\n";
-    gen->WriteCode(0, lex->GetLexeme());
+    WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case LT_T:
     ruleFile << "Using Rule 76\n";
-    gen->WriteCode(0, lex->GetLexeme());
+    WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case GTE_T:
     ruleFile << "Using Rule 77\n";
-    gen->WriteCode(0, lex->GetLexeme());
+    WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case LTE_T:
     ruleFile << "Using Rule 78\n";
-    gen->WriteCode(0, lex->GetLexeme());
+    WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case SQUOTE_T:
     ruleFile << "Using Rule 79\n";
-    gen->WriteCode(0, lex->GetLexeme());
+    WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     errors += any_other_token();
     //Should this be a "
-   gen->WriteCode(0, lex->GetLexeme());
+   WriteCode(0, lex->GetLexeme());
     break;
   case COND_T:
     ruleFile << "Using Rule 80\n";
-    gen->WriteCode(0, lex->GetLexeme());
+    WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   case ELSE_T:
     ruleFile << "Using Rule 81\n";
-    gen->WriteCode(-1, lex->GetLexeme());
+    WriteCode(0, lex->GetLexeme());
     token = lex->GetToken();
     break;
   default:

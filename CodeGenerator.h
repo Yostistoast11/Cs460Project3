@@ -9,7 +9,8 @@ using namespace std;
 class CodeGen 
 {
     public:
-	CodeGen (string filename, LexicalAnalyzer * L);
+  CodeGen (string filename);  
+  //CodeGen (string filename, LexicalAnalyzer * L);
 	~CodeGen ();
 	void WriteCode (int tabs, string code);
     private:
