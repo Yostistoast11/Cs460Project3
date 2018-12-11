@@ -87,7 +87,7 @@ int SyntacticalAnalyzer::more_defines(){
 	if(token == IDENT_T){
 		ruleFile << "Using Rule 3" << endl;
 		token = lex->GetToken();
-		errors += stmt_list();
+		errors += stmt_list("");
 		if(token != RPAREN_T){
 			errors++;
 			ReportError(string("expected a RPAREN_T in m_d, but found  " + lex->GetTokenName(token)));
@@ -156,7 +156,7 @@ int SyntacticalAnalyzer::define(){
 	
 	token = lex->GetToken();
 	errors += stmt();
-	errors += stmt_list();
+	errors += stmt_list("");
 
 
 	if(token != RPAREN_T){
@@ -175,7 +175,7 @@ int SyntacticalAnalyzer::define(){
 
 }
 
-int SyntacticalAnalyzer::stmt_list(string operator){
+int SyntacticalAnalyzer::stmt_list(string op){
   //This function deals with the stmt_list rules(5-6) and will check for syntactical correctness,
   //this function will then, depending on the token seen, send the program to stmt and stmt list
   // or will return after seeing nothing in the file.
@@ -198,7 +198,7 @@ int SyntacticalAnalyzer::stmt_list(string operator){
 	} 
 	ruleFile << "Using Rule 5" << endl;
 	errors += stmt();
-	errors += stmt_list();
+	errors += stmt_list("");
 	ruleFile << "Exiting Stmt_List function; current token is: " << lex ->GetTokenName (token) << endl;
 
 	return errors;
@@ -533,7 +533,7 @@ int SyntacticalAnalyzer::action(){
 		//RULE 28
 		ruleFile << "Using Rule 28" << endl;
 		token = lex->GetToken();
-		errors += stmt_list();
+		errors += stmt_list("");
 		ruleFile << "Exiting Action function; current token is: " << lex->GetTokenName(token) << endl;
 		return errors;
 	}
@@ -541,7 +541,7 @@ int SyntacticalAnalyzer::action(){
 		//RULE 29
 		ruleFile << "Using Rule 29" << endl;
 		token = lex->GetToken();
-		errors += stmt_list();
+		errors += stmt_list("");
 		ruleFile << "Exiting Action function; current token is: " << lex->GetTokenName(token) << endl;
 		return errors;
 	}
@@ -597,7 +597,7 @@ int SyntacticalAnalyzer::action(){
 		//RULE 36
 		ruleFile << "Using Rule 36" << endl;
 		token = lex->GetToken();
-		errors += stmt_list();
+		errors += stmt_list("");
 		ruleFile << "Exiting Action function; current token is: " << lex->GetTokenName(token) << endl;
 		return errors;
 	}
@@ -606,7 +606,7 @@ int SyntacticalAnalyzer::action(){
 		ruleFile << "Using Rule 37" << endl;
 		token = lex->GetToken();
 		errors += stmt();
-		errors += stmt_list();
+		errors += stmt_list("");
 		ruleFile << "Exiting Action function; current token is: " << lex->GetTokenName(token) << endl;
 		return errors;
 	}
@@ -615,7 +615,7 @@ int SyntacticalAnalyzer::action(){
 		ruleFile << "Using Rule 38" << endl;
 		token = lex->GetToken();
 		errors += stmt();
-		errors += stmt_list();
+		errors += stmt_list("");
 		ruleFile << "Exiting Action function; current token is: " << lex->GetTokenName(token) << endl;
 		return errors;
 	}
@@ -623,7 +623,7 @@ int SyntacticalAnalyzer::action(){
 		//RULE 39
 		ruleFile << "Using Rule 39" << endl;
 		token = lex->GetToken();
-		errors += stmt_list();
+		errors += stmt_list("");
 		ruleFile << "Exiting Action function; current token is: " << lex->GetTokenName(token) << endl;
 		return errors;
 	}
@@ -648,7 +648,7 @@ int SyntacticalAnalyzer::action(){
 		//RULE 42
 		ruleFile << "Using Rule 42" << endl;
 		token = lex->GetToken();
-		errors += stmt_list();
+		errors += stmt_list("");
 		ruleFile << "Exiting Action function; current token is: " << lex->GetTokenName(token) << endl;
 		return errors;
 	}
@@ -656,7 +656,7 @@ int SyntacticalAnalyzer::action(){
 		//RULE 43
 		ruleFile << "Using Rule 43" << endl;
 		token = lex->GetToken();
-		errors += stmt_list();
+		errors += stmt_list("");
 		ruleFile << "Exiting Action function; current token is: " << lex->GetTokenName(token) << endl;
 		return errors;
 	}
@@ -664,7 +664,7 @@ int SyntacticalAnalyzer::action(){
 		//RULE 44
 		ruleFile << "Using Rule 44" << endl;
 		token = lex->GetToken();
-		errors += stmt_list();
+		errors += stmt_list("");
 		ruleFile << "Exiting Action function; current token is: " << lex->GetTokenName(token) << endl;
 		return errors;
 	}
@@ -672,7 +672,7 @@ int SyntacticalAnalyzer::action(){
 		//RULE 45
 		ruleFile << "Using Rule 45" << endl;
 		token = lex->GetToken();
-		errors += stmt_list();
+		errors += stmt_list("");
 		ruleFile << "Exiting Action function; current token is: " << lex->GetTokenName(token) << endl;
 		return errors;
 	}
@@ -680,7 +680,7 @@ int SyntacticalAnalyzer::action(){
 		//RULE 46
 		ruleFile << "Using Rule 46" << endl;
 		token = lex->GetToken();
-		errors += stmt_list();
+		errors += stmt_list("");
 		ruleFile << "Exiting Action function; current token is: " << lex->GetTokenName(token) << endl;
 		return errors;
 	}
@@ -688,7 +688,7 @@ int SyntacticalAnalyzer::action(){
 		//RULE 47
 		ruleFile << "Using Rule 47" << endl;
 		token = lex->GetToken();
-		errors += stmt_list();
+		errors += stmt_list("");
 		ruleFile << "Exiting Action function; current token is: " << lex->GetTokenName(token) << endl;
 		return errors;
 	}
