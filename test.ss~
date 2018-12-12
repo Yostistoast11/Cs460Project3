@@ -1,5 +1,0 @@
-(define (main)
-  (display "This is a test run")
-  )
-
-(main)
