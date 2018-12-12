@@ -143,17 +143,19 @@ int SyntacticalAnalyzer::define(){
 		ReportError(string("expected a IDENT_T in define, but found  " + lex->GetTokenName(token)));
 	}
 
-	//Caveman's first attempt at coding project3 
-	//	gen->WriteCode (0, ("object" + lex->GetLexeme() + "(")); 
-	gen->WriteCode(0, lex->GetLexeme());	  
+	//Caveman's first attempt at coding project3
+	if ( lex->GetLexeme() == "main" )
+	  gen->WriteCode (0, ("int " + lex->GetLexeme() + "("));
+	else
+	  gen->WriteCode (0, ("Object " + lex->GetLexeme() + "(")); 
 	token = lex->GetToken();
 	errors += param_list();
-
 	if(token != RPAREN_T){
 		errors++;
 		ReportError(string("expected a RPAREN_T in define, but found  " + lex->GetTokenName(token)));
 	}
 	
+	gen->WriteCode(0, ")\n{\n");
 	token = lex->GetToken();
 	errors += stmt();
 	errors += stmt_list("");
@@ -166,7 +168,7 @@ int SyntacticalAnalyzer::define(){
 	}
 
 	//Caveman's second attempt
-	gen->WriteCode(0, ")\n{\n"); 
+	gen->WriteCode(0, "}\n"); 
 	token = lex->GetToken();
 	ruleFile << "Exiting Define function; current token is: " << lex ->GetTokenName (token) << endl;
 
@@ -696,7 +698,9 @@ int SyntacticalAnalyzer::action(){
 		//RULE 48
 		ruleFile << "Using Rule 48" << endl;
 		token = lex->GetToken();
+		gen->WriteCode(0, "cout << ");
 		errors += stmt();
+		gen->WriteCode(0, "; \n");
 		ruleFile << "Exiting Action function; current token is: " << lex->GetTokenName(token) << endl;
 		return errors;
 	}
@@ -704,6 +708,7 @@ int SyntacticalAnalyzer::action(){
 		//RULE 49
 		ruleFile << "Using Rule 49" << endl;
 		token = lex->GetToken();
+		gen->WriteCode(0, "cout << endl; \n");
 		ruleFile << "Exiting Action function; current token is: " << lex->GetTokenName(token) << endl;
 		return errors;
 	}

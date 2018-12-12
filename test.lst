@@ -1,0 +1,9 @@
+Input file: test.ss
+   1: (define (main)
+   2:   (display "This is a test run")
+   3:   (newline)
+   4:   )
+   5: 
+   6: (main)
+0 Syntactical errors found in input file
+0 Lexical errors found in input file
