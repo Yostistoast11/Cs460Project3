@@ -66,10 +66,12 @@ int SyntacticalAnalyzer::program(){
 	}
 
 	token = lex->GetToken();
+	
 	errors += more_defines();
+
 	if (token != EOF_T) {
-		errors ++;		
-		ReportError(string("expected a EOF_T in program, but found  " + lex->GetTokenName(token)));
+	  errors ++;		
+	  ReportError(string("expected a EOF_T in program, but found  " + lex->GetTokenName(token)));
 	} // end of if EOF
 	ruleFile << "Exiting Program function; current token is: " << lex ->GetTokenName (token) << endl;
 
@@ -86,19 +88,22 @@ int SyntacticalAnalyzer::more_defines(){
 	int errors = 0;
 	if(token == IDENT_T){
 		ruleFile << "Using Rule 3" << endl;
-		if (lex->GetLexeme()!= "main")
-		gen->WriteCode(0, lex->GetLexeme());
-		token = lex->GetToken();
 		//gen->WriteCode(0, "Object  " + lex->GetLexeme());
-		 
+		if (token == EOF_T){
+		  errors++;
+		  ReportError(string("EOF_T token detected ending function stmt_list"));
+		  ruleFile << "Exiting Stmt_List function; current token is: " << lex ->GetTokenName (token) << endl;
+		  return errors;
+		  
+		}
 		errors += stmt_list("");
 		if(token != RPAREN_T){
-			errors++;
-			ReportError(string("expected a RPAREN_T in m_d, but found  " + lex->GetTokenName(token)));
+		  errors++;
+		  ReportError(string("expected a RPAREN_T in m_d, but found  " + lex->GetTokenName(token)));
 		}
 		token = lex->GetToken();
 		ruleFile << "Exiting More_Defines function; current token is: " << lex ->GetTokenName (token) << endl; 
-
+		
 		return errors; 
 	} 
 
@@ -112,6 +117,7 @@ int SyntacticalAnalyzer::more_defines(){
 	  ReportError(string("expected a LPAREN_T in m_d, but found  " + lex->GetTokenName(token)));
 	}
 	token = lex->GetToken();
+	
 	if (token != EOF_T)
 	  errors+= more_defines();
 	ruleFile << "Exiting More_Defines function; current token is: " << lex ->GetTokenName (token) << endl;
@@ -125,8 +131,8 @@ int SyntacticalAnalyzer::define(){
   //this function will, depending on the token seen, send the program to param_list after
   //checking for the presence of some needed tokens for this rule.
   ruleFile << "Entering Define function; current token is: " << lex ->GetTokenName(token) << ", lexeme: " << lex->GetLexeme() << endl;
-
-	int errors = 0;
+  bool main = false;
+  int errors = 0;
 
 	ruleFile << "Using  Rule 4" << endl;
 
@@ -148,8 +154,10 @@ int SyntacticalAnalyzer::define(){
 	}
 
 	//Caveman's first attempt at coding project3
-	if ( lex->GetLexeme() == "main" )
+	if ( lex->GetLexeme() == "main" ){
 	  gen->WriteCode (0, ("int " + lex->GetLexeme() + "("));
+	  main = true;
+	}
 	else
 	  gen->WriteCode (0, ("Object " + lex->GetLexeme() + "(")); 
 	token = lex->GetToken();
@@ -170,7 +178,8 @@ int SyntacticalAnalyzer::define(){
 	  ReportError(string("expected a RPAREN_T in define, but found  " + lex->GetTokenName(token)));
 		token = lex->GetToken();
 	}
-
+	if(main)
+	  gen->WriteCode(0, "return 0;\n");
 	//Caveman's second attempt
 	gen->WriteCode(0, "}\n"); 
 	token = lex->GetToken();
@@ -302,7 +311,7 @@ int SyntacticalAnalyzer::literal(){
   if (token == NUMLIT_T)
     { 
       ruleFile << "Using Rule 10" << endl;
-      gen->WriteCode(0, lex->GetLexeme());
+      gen->WriteCode(0,"Object(" + lex->GetLexeme() + ")");
       token = lex->GetToken();
       ruleFile << "Exiting Literal function; current token is: " << lex ->GetTokenName (token) << endl;
       return errors;
@@ -312,7 +321,7 @@ int SyntacticalAnalyzer::literal(){
   if (token == STRLIT_T)
     {
      ruleFile << "Using Rule 11" << endl;
-     gen->WriteCode(0, lex->GetLexeme());
+     gen->WriteCode(0,"Object(" + lex->GetLexeme() + ")");
      token = lex->GetToken();
      ruleFile << "Exiting Literal function; current token is: " << lex ->GetTokenName (token) << endl;
      return errors;
