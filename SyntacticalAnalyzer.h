@@ -18,14 +18,14 @@ class SyntacticalAnalyzer
         int more_defines();
         int define();
         int stmt_list(string op);
-        int stmt();
+        int stmt(string op);
         int literal();
         int more_tokens();
         int quoted_lit();
-        int param_list();
+        int param_list(int count);
         int else_part();
         int stmt_pair();
-        int stmt_pair_body();
+        int stmt_pair_body(string op);
         int action();
         int any_other_token();
 	void ReportError (const string & msg);
