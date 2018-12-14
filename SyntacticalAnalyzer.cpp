@@ -5,13 +5,12 @@
 //implimented in Project1 to check for syntactical correctness of a scheme style program. This will generate
 //an out put file of the name of the input file stripped of .ss and added .p2. In this file there will be printed
 //a summary of how this program read through the input file and aslo any syntactical errors within the code.
-
-
 #include <iostream>
 #include <iomanip>
 #include <fstream>
 #include "SyntacticalAnalyzer.h"
 #include "CodeGenerator.h"
+
 using namespace std;
 
 SyntacticalAnalyzer::SyntacticalAnalyzer (char * filename)
@@ -180,6 +179,8 @@ int SyntacticalAnalyzer::define(){
 	}
 	if(main)
 	  gen->WriteCode(0, "return 0;\n");
+	if(!(main))
+          gen->WriteCode(0, "return Object(0);\n");
 	//Caveman's second attempt
 	gen->WriteCode(0, "}\n"); 
 	token = lex->GetToken();
@@ -237,9 +238,16 @@ int SyntacticalAnalyzer::stmt(string op){
 	  errors++;
 	}
 	*/
-	
+	if (op != "" && op!= "-" && op!="%"){
+          gen->WriteCode(0, op);
+	  op = "";
+	}
+
 	switch(token){
 	case IDENT_T:
+	  
+	  if (lex->GetLexeme() != "main")
+	    gen->WriteCode(0, lex->GetLexeme());
 	  ruleFile << "Using Rule 8" << endl;
 	  token = lex->GetToken();
 	  break;
@@ -573,8 +581,11 @@ int SyntacticalAnalyzer::action(){
 		//RULE 27
 		ruleFile << "Using Rule 27" << endl;
 		token = lex->GetToken();
-		errors += stmt("cons");
+		gen->WriteCode(0, "cons(");
+		errors += stmt("cons(");
+		gen->WriteCode(0, " , ");
 		errors += stmt("");
+		gen->WriteCode(0, ")");
 		ruleFile << "Exiting Action function; current token is: " << lex->GetTokenName(token) << endl;
 		return errors;
 	}

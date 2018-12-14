@@ -1,3 +1,9 @@
+(define (func1 v1 v2)
+  (cons v1 v2)
+  (car v1)
+  )
+
+
 (define (main)
   (if (> 12  2) 
       (display "This is true")
@@ -9,6 +15,8 @@
       (else (display "equal"))) 
   (newline)
   (display "This is a test run")
+  (newline)
+  (display (- 12 (+ 5 6)))
   (newline)
   )
 

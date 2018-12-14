@@ -4,6 +4,9 @@
 #include "Object.cpp"
 using namespace std;
 
+Object func1(Object v1, Object v2){
+cons(cons(v1 , v2)listpv1return Object(0);
+}
 int main(){
 if(Object(12)>Object(2)){
 cout << Object("This is true"); 
@@ -23,6 +26,8 @@ cout << Object("equal");
 } 
 cout << endl; 
 cout << Object("This is a test run"); 
+cout << endl; 
+ cout << (Object(12)-(Object(5)+Object(6))); 
 cout << endl; 
 return 0;
 }
