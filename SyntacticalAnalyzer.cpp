@@ -14,6 +14,7 @@
 using namespace std;
 int depth = 0;
 bool from_else = false;
+bool is_main = false;
 SyntacticalAnalyzer::SyntacticalAnalyzer (char * filename)
 {
 	lex = new LexicalAnalyzer (filename);
@@ -131,7 +132,6 @@ int SyntacticalAnalyzer::define(){
   //this function will, depending on the token seen, send the program to param_list after
   //checking for the presence of some needed tokens for this rule.
   ruleFile << "Entering Define function; current token is: " << lex ->GetTokenName(token) << ", lexeme: " << lex->GetLexeme() << endl;
-  bool main = false;
   int errors = 0;
 
 	ruleFile << "Using  Rule 4" << endl;
@@ -156,7 +156,7 @@ int SyntacticalAnalyzer::define(){
 	//Caveman's first attempt at coding project3
 	if ( lex->GetLexeme() == "main" ){
 	  gen->WriteCode (0, ("int " + lex->GetLexeme() + "("));
-	  main = true;
+	  is_main = true;
 	}
 	else
 	  gen->WriteCode (0, ("Object " + lex->GetLexeme() + "(")); 
@@ -178,13 +178,14 @@ int SyntacticalAnalyzer::define(){
 	  ReportError(string("expected a RPAREN_T in define, but found  " + lex->GetTokenName(token)));
 		token = lex->GetToken();
 	}
-	if(main)
+	if(is_main)
 	  gen->WriteCode(0, "return 0;\n");
-	if(!(main))
+	if(!(is_main))
           gen->WriteCode(0, "return Object(0);\n");
 	//Caveman's second attempt
 	gen->WriteCode(0, "}\n"); 
 	token = lex->GetToken();
+	is_main = false;
 	ruleFile << "Exiting Define function; current token is: " << lex ->GetTokenName (token) << endl;
 
 
@@ -216,7 +217,7 @@ int SyntacticalAnalyzer::stmt_list(string op){
 	
 	errors += stmt("");
 	if (op != ""){
-	  gen->WriteCode(0, op);
+	  gen->WriteCode(0, " " + op + " ");
 	  }
 	errors += stmt_list("");
 	
@@ -247,8 +248,11 @@ int SyntacticalAnalyzer::stmt(string op){
 	switch(token){
 	case IDENT_T:
 	  
-	  if (lex->GetLexeme() != "main")
+	  if (lex->GetLexeme() != "main" )
 	    gen->WriteCode(0, lex->GetLexeme());
+	  
+	  if ( op == "-" || op =="%")
+	    gen->WriteCode(0, " " + op +" ");
 	  ruleFile << "Using Rule 8" << endl;
 	  token = lex->GetToken();
 	  break;
@@ -258,9 +262,13 @@ int SyntacticalAnalyzer::stmt(string op){
 	  ruleFile << "Using Rule 9" << endl;
 	  //ruleFile << "stmt function complete. Current token is: " << lex->GetTokenName(token) << endl;
 	  token = lex->GetToken();
+	   if(depth == 0 && lex->GetLexeme() != "display" && lex->GetLexeme() != "newline" && lex->GetLexeme() != "if"   && lex->GetLexeme() != "cond" && !is_main) {
+            gen->WriteCode(0, "return ");
+          }
 	  depth++;
 	  errors += action();
 	  depth--;
+	  
 	  //returned token should be a RPAREN?
 	  if(token == RPAREN_T){
 	    token=lex->GetToken();
@@ -318,7 +326,7 @@ int SyntacticalAnalyzer::stmt(string op){
 	}
 
 	ruleFile << "Exiting Stmt function; current token is: " << lex ->GetTokenName (token) << endl;
-	return errors;	
+  	return errors;	
 }
 
 int SyntacticalAnalyzer::literal(){
@@ -673,7 +681,8 @@ int SyntacticalAnalyzer::action(){
 		//RULE 35
 		ruleFile << "Using Rule 35" << endl;
 		token = lex->GetToken();
-		errors += stmt("stringp");
+		errors += stmt("stringp(");
+		gen->WriteCode(0, ")");
 		ruleFile << "Exiting Action function; current token is: " << lex->GetTokenName(token) << endl;
 		return errors;
 	}
@@ -735,7 +744,7 @@ int SyntacticalAnalyzer::action(){
 		ruleFile << "Using Rule 41" << endl;
 		token = lex->GetToken();
 		errors += stmt("round(");
-		gen->WriteCode(0, "(");
+		gen->WriteCode(0, ")");
 		ruleFile << "Exiting Action function; current token is: " << lex->GetTokenName(token) << endl;
 		return errors;
 	}
@@ -782,8 +791,10 @@ int SyntacticalAnalyzer::action(){
 	if ( token == IDENT_T){
 		//RULE 47
 		ruleFile << "Using Rule 47" << endl;
+		gen->WriteCode(0, lex->GetLexeme() + "(");
 		token = lex->GetToken();
 		errors += stmt_list("");
+		gen->WriteCode(0, ")");
 		ruleFile << "Exiting Action function; current token is: " << lex->GetTokenName(token) << endl;
 		return errors;
 	}

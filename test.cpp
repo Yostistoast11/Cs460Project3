@@ -5,29 +5,43 @@
 using namespace std;
 
 Object func1(Object v1, Object v2){
-cons(v1 , v2)listop("car" , v1)return Object(0);
+  return cons(v1 , v2);
+  return listop("car" , v1);
+  return listop("car" , listop("cdr" , v1));
+  return Object(0);
+}
+Object funky1(Object v1){
+  if(v1 > Object(6)){
+    return v1 == (v1 + Object(1));
+  }
+  else{
+    return v1 == (v1 - Object(1));
+  }
+  return Object(0);
 }
 int main(){
-if(Object(12)>Object(2)){
-cout << Object("This is true"); 
-}
-else{
-cout << Object("This is false"); 
-}
-cout << endl; 
-if(Object(3)>Object(3)){ 
-cout << Object("greater"); 
-} 
-else if(Object(3)<Object(3)){ 
-cout << Object("less"); 
-} 
-else{ 
-cout << Object("equal"); 
-} 
-cout << endl; 
-cout << Object("This is a test run"); 
-cout << endl; 
-cout << (Object(12)-(Object(5)+Object(6))); 
-cout << endl; 
-return 0;
+  if(Object(12) > Object(2)){
+    cout << Object("This is true");
+  }
+  else{
+    cout << Object("This is false");
+  }
+  cout << endl;
+  if(Object(3) > Object(3)){ 
+    cout << Object("greater");
+  } 
+  else if(Object(3) < Object(3)){ 
+    cout << Object("less");
+  } 
+  else{ 
+    cout << Object("equal");
+  } 
+  cout << endl;
+  cout << Object("This is a test run");
+  cout << endl;
+  cout << (Object(12)-(Object(5) + Object(6)));
+  cout << endl;
+  cout << funky1(Object(5));
+  cout << endl;
+  return 0;
 }

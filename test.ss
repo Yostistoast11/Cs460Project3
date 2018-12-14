@@ -2,9 +2,14 @@
   (cons v1 v2)
   (car v1)
   (car ( cdr v1))
-  (cons (cons v1 (car v2 )))
-  )
 
+  )
+(define (funky1 v1)
+  (if ( > v1 6)
+      (= v1 (+ v1 1))
+      (= v1 (- v1 1))
+      )
+  )
 
 (define (main)
   (if (> 12  2)
@@ -20,6 +25,9 @@
   (newline)
   (display (- 12 (+ 5 6)))
   (newline)
+  (display (funky1 5))
+  (newline)
+  
   )
 
 (main)
