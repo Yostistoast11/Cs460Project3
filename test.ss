@@ -27,7 +27,8 @@
   (newline)
   (display (funky1 5))
   (newline)
-  
+  (display (func1 '(a b c) '(a b c)))
+  (newline)
   )
 
 (main)
