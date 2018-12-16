@@ -4,46 +4,38 @@
 #include "Object.cpp"
 using namespace std;
 
-Object func1(Object v1, Object v2){
-	return cons(v1 , v2);
-	return 	listop("car" , v1);
-	return 	listop("car" , 	listop("cdr" , v1));
-	return Object(0);
-}
-Object funky1(Object v1){
-	if(v1 > Object(6)){
-		return v1 == (v1 + Object(1));
+Object insert_last(Object ls, Object v){
+	if(listp(ls)){
+		if(nullp(ls)){
+			return cons(v , Object("()"));
+		}
+		else{
+			return cons(listop("car" , ls) , insert_last(listop("cdr" , ls) , v));
+		}
 	}
 	else{
-		return v1 == (v1 - Object(1));
+		return Object("first_argument_of_insert_last_must_be_a_list");
+	}
+	return Object(0);
+}
+Object list_reverse(Object ls){
+	if(listp(ls)){
+		if(nullp(ls)){
+			return Object("()");
+		}
+		else{
+			return insert_last(list_reverse(listop("cdr" , ls)) , listop("car" , ls));
+		}
+	}
+	else{
+		return Object("list_reverse_requires_a_list_argument");
 	}
 	return Object(0);
 }
 int main(){
-	if(Object(12) > Object(2)){
-	  cout << Object("This is true");
-	}
-	else{
-	  cout << Object("This is false");
-	}
+	cout << list_reverse(Object("(indentifier numeric literal cons if display newline cddr and or not define number? symbol list? zero? null? modulo string? + - / * = > < >= <= 'anything	1 1 1.01 \"HelloWorld\")"));
 	cout << endl;
-	if(Object(3) > Object(3)){ 
-	  cout << Object("greater");
-	} 
-	else if(Object(3) < Object(3)){ 
-	  cout << Object("less");
-	} 
-	else{ 
-	  cout << Object("equal");
-	} 
-	cout << endl;
-	cout << Object("This is a test run");
-	cout << endl;
-	cout << (Object(12)-(Object(5) + Object(6)));
-	cout << endl;
-	cout << funky1(Object(5));
-	cout << endl;
-	cout << func1(Object( "  a b c " ) , Object( "  a b c " ));
+	cout << cons(Object("a") , Object("b"));
 	cout << endl;
 	return 0;
 }
